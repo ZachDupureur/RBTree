@@ -20,7 +20,7 @@
                      if (temp->left == nullptr) { // Add node if nullptr
                          temp->left = newNode;
                          newNode->parent = temp; // Assign parent
-                         newNode->color = false; // New leaf must be black
+                         newNode->color = true; // New node must be red
                          temp = nullptr;
                      }
                      else {
@@ -32,7 +32,7 @@
                          if (temp->right == nullptr) { // Add node if nullptr
                              temp->right = newNode;
                              newNode->parent = temp; // Assign parent
-                             newNode->color = false; // New leaf must be black
+                             newNode->color = true; // New node must be red
                              temp = nullptr;
                          }
                          else {
@@ -65,10 +65,47 @@ void switchColor (Node* s) {
     }
 }
 
-Node::Node(double i) {
+Node::Node() { // default constructor
+    data = 0;
+    left = nullptr;
+    right = nullptr;
+    parent = nullptr;
+    color = false;
+}
+
+Node::Node(double i) { // Parameter constructor
     right = nullptr;
     left = nullptr;
     parent = nullptr;
     data = i;
     color = false;
+}
+
+void rotateL(Tree *t, Node *root) {  // FIXME
+    Node * A = root->right;
+    Node * B = A->left;
+    A->parent = root->parent;
+    A->left = root;
+    root->left = B;
+    if (B != nullptr)
+        B->parent = root;
+    root->parent = A;
+
+    if (t->root == root) {
+        t->root = A;
+    }
+}
+
+void rotateR (Node * root) { // FIXME
+}
+
+Node &Node::operator = (const Node &rightObj) {
+    if (this != &rightObj) {
+        this->data = rightObj.data;
+        this->right = rightObj.right;
+        this->left = rightObj.left;
+        this->parent = rightObj.parent;
+        this->color = rightObj.color;
+    }
+    return *this;
 }

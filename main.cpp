@@ -1,4 +1,10 @@
 #include "header.h"
 int main () {
-    Node root(45);
+    Node A(45);
+    Tree newTree(&A);
+
+    insert(newTree.root, 55);
+    insert(newTree.root, 65);
+    rotateL(&newTree, &A);
+
 }

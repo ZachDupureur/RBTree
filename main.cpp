@@ -6,5 +6,6 @@ int main () {
     insert(newTree.root, 55);
     insert(newTree.root, 65);
     rotateL(&newTree, &A);
+    std::cout << "Hello!";
 
 }

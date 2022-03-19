@@ -84,19 +84,50 @@ Node::Node(double i) { // Parameter constructor
 void rotateL(Tree *t, Node *root) {  // FIXME
     Node * A = root->right;
     Node * B = A->left;
-    A->parent = root->parent;
+
     A->left = root;
-    root->left = B;
-    if (B != nullptr)
-        B->parent = root;
     root->parent = A;
+    root->right = B;
+
+    if (t->root == root) {
+        t->root = A;
+    }
+
+}
+
+void rotateR (Tree * t, Node * root) {
+    Node * A = root->left;
+    Node * B = A->right;
+
+    A->right = root;
+    root->parent = A;
+    root-> left = B;
 
     if (t->root == root) {
         t->root = A;
     }
 }
 
-void rotateR (Node * root) { // FIXME
+void fixColors(Tree *t, Node *root) {
+
+    Node * uncle = nullptr;
+    Node * temp = root;
+
+    if (root == root->parent->left) {
+        uncle = root->parent->right;
+    }
+    else {
+        uncle = root->parent->left;
+    }
+
+    if (uncle == nullptr || !uncle->color) {
+
+        while (temp != t->root) {
+
+        }
+    }
+
+
 }
 
 Node &Node::operator = (const Node &rightObj) {

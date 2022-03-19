@@ -43,6 +43,9 @@
              }
          }
      }
+
+    int balance = getHeight(root);
+
  }
 
 int getHeight(Node *root) {
@@ -81,7 +84,7 @@ Node::Node(double i) { // Parameter constructor
     color = false;
 }
 
-void rotateL(Tree *t, Node *root) {  // FIXME
+void rotateL(Tree *t, Node *root) {
     Node * A = root->right;
     Node * B = A->left;
 
@@ -92,7 +95,6 @@ void rotateL(Tree *t, Node *root) {  // FIXME
     if (t->root == root) {
         t->root = A;
     }
-
 }
 
 void rotateR (Tree * t, Node * root) {
@@ -106,6 +108,16 @@ void rotateR (Tree * t, Node * root) {
     if (t->root == root) {
         t->root = A;
     }
+}
+
+void rotateLR(Tree *t, Node *root) {
+    rotateL(t, root->left);
+    rotateR(t, root);
+}
+
+void rotateRL(Tree *t, Node *root) {
+    rotateR(t, root->right);
+    rotateL(t, root);
 }
 
 void fixColors(Tree *t, Node *root) {

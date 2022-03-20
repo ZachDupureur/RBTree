@@ -3,9 +3,10 @@ int main () {
     Node A(45);
     Tree newTree(&A);
 
-    insert(newTree.root, 55);
-    insert(newTree.root, 65);
-    rotateL(&newTree, &A);
-    std::cout << "Hello!";
+    insert(&newTree, 45);
+    insert(&newTree, 55);
+    insert(&newTree, 65);
+    insert(&newTree, 75);
+
 
 }

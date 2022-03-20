@@ -2,11 +2,11 @@
 
 #include "header.h"
 
- void insert(Node* root, double key) {
-     Node *temp = root;
+ void insert(Tree * t, double key) {
+     Node *temp = t->root;
      Node *newNode = new Node(key);
      if (temp == nullptr) { // Tree is empty, make new node root
-         root = newNode;
+         t->root = newNode;
          newNode->color = false; // Root must be black
      }
      else { // Tree not empty
@@ -44,8 +44,7 @@
          }
      }
 
-    int balance = getHeight(root);
-
+     fixTree(t,temp);
  }
 
 int getHeight(Node *root) {
@@ -110,36 +109,71 @@ void rotateR (Tree * t, Node * root) {
     }
 }
 
-void rotateLR(Tree *t, Node *root) {
-    rotateL(t, root->left);
-    rotateR(t, root);
-}
+void fixTree(Tree *t, Node *root) {
 
-void rotateRL(Tree *t, Node *root) {
-    rotateR(t, root->right);
-    rotateL(t, root);
-}
+    Node* grandParent = nullptr;
+    Node* uncle = nullptr;
+    Node* parent = nullptr;
+    Node* temp = new Node;
 
-void fixColors(Tree *t, Node *root) {
 
-    Node * uncle = nullptr;
-    Node * temp = root;
+    while (root != t->root && !root->color && root->parent->color) {
+        grandParent = root->parent->parent;
+        parent = root->parent;
 
-    if (root == root->parent->left) {
-        uncle = root->parent->right;
-    }
-    else {
-        uncle = root->parent->left;
-    }
 
-    if (uncle == nullptr || !uncle->color) {
+        if (root->parent == grandParent->left) {
+            uncle = grandParent->right;
 
-        while (temp != t->root) {
+            if (uncle != nullptr && uncle->color) {
+                grandParent->color = true;
+                parent->color = false;
+                uncle->color = false;
+                root = grandParent;
+            }
+            else {
+                // New node is right child of parent. Rotate Left
+                if (root == parent->right) {
+                    rotateL(t, parent);
+                    root = parent;
+                    parent = root->parent;
+                }
 
+                rotateR(t, grandParent);
+                temp->color = grandParent->color;
+                grandParent->color = parent->color;
+                parent->color = temp->color;
+                root = parent;
+            }
+        }
+
+        else {
+            uncle = grandParent->left;
+
+            if (uncle != nullptr && uncle->color) {
+                grandParent->color = true;
+                parent->color = false;
+                uncle->color = false;
+                root = grandParent;
+            }
+            else {
+                // New node is left child of parent. Rotate Right
+                if ( root == parent->left) {
+                    rotateL(t, parent);
+                    root = parent;
+                    parent = root->parent;
+                }
+
+                rotateL(t,grandParent);
+                temp->color = grandParent->color;
+                grandParent->color = parent->color;
+                parent->color = temp->color;
+                root = parent;
+            }
         }
     }
 
-
+    t->root->color = false;
 }
 
 Node &Node::operator = (const Node &rightObj) {

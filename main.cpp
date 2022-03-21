@@ -7,6 +7,7 @@ int main () {
     insert(&newTree, 55);
     insert(&newTree, 65);
     insert(&newTree, 75);
-
+    insert(&newTree, 99);
+    std::cout << "Hey!";
 
 }

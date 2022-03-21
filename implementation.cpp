@@ -44,7 +44,7 @@
          }
      }
 
-     fixTree(t,temp);
+     fixTree(t,newNode);
  }
 
 int getHeight(Node *root) {
@@ -111,13 +111,13 @@ void rotateR (Tree * t, Node * root) {
 
 void fixTree(Tree *t, Node *root) {
 
+    Node* parent = nullptr;
     Node* grandParent = nullptr;
     Node* uncle = nullptr;
-    Node* parent = nullptr;
     Node* temp = new Node;
 
 
-    while (root != t->root && !root->color && root->parent->color) {
+    while ((root != t->root) && root->color && root->parent->color) {
         grandParent = root->parent->parent;
         parent = root->parent;
 

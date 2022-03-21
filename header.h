@@ -31,9 +31,10 @@ public:
 };
 
 void insert(Tree *t, double key);
-void rotateL(Tree *t, Node *root);
-void rotateR(Tree *t, Node *root);
-void fixTree(Tree *t, Node *root);
+void rotateL(Tree *&t, Node *&root);
+void rotateR(Tree *&t, Node *&root);
+void fixTree(Tree *&t, Node *&root);
 int getHeight(Node *root); // Get height of specific root
+void printTree(Node* root, int spacing);
 
 #endif //RBTREE_HEADER_H

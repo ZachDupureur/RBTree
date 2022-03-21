@@ -83,48 +83,72 @@ Node::Node(double i) { // Parameter constructor
     color = false;
 }
 
-void rotateL(Tree *t, Node *root) {
-    Node * A = root->right;
-    Node * B = A->left;
+void rotateL(Tree *&t, Node *&root) {
+    Node *rootRight = root->right;
+    root->right = rootRight->left;
 
-    A->left = root;
-    root->parent = A;
-    root->right = B;
-
-    if (t->root == root) {
-        t->root = A;
+    if (root->right != nullptr) {
+        root->right->parent = root;
     }
+
+    rootRight->parent = root->parent;
+
+    if (root->parent == nullptr) {
+        t->root = rootRight;
+    }
+
+    else if (root == root->parent->left) {
+        root->parent->left = rootRight;
+    }
+    else {
+        root->parent->right = rootRight;
+    }
+    rootRight->left = root;
+    root->parent = rootRight;
 }
 
-void rotateR (Tree * t, Node * root) {
-    Node * A = root->left;
-    Node * B = A->right;
+void rotateR (Tree *&t, Node *&root) {
+    Node *rootLeft = root->left;
+    root->left = rootLeft->right;
 
-    A->right = root;
-    root->parent = A;
-    root-> left = B;
-
-    if (t->root == root) {
-        t->root = A;
+    if (root->left != nullptr) {
+        root->left->parent = root;
     }
+
+    rootLeft->parent = root->parent;
+
+    if (root->parent == nullptr) {
+        t->root = rootLeft;
+    }
+
+    else if (root == root->parent->left) {
+        root->parent->left = rootLeft;
+    }
+
+    else {
+        root->parent->right = rootLeft;
+    }
+
+    rootLeft->right = root;
+    root->parent = rootLeft;
 }
 
-void fixTree(Tree *t, Node *root) {
+void fixTree(Tree *&t, Node *&root) {
 
     Node* parent = nullptr;
     Node* grandParent = nullptr;
     Node* uncle = nullptr;
     Node* temp = new Node;
 
-
     while ((root != t->root) && root->color && root->parent->color) {
         grandParent = root->parent->parent;
         parent = root->parent;
 
-
-        if (root->parent == grandParent->left) {
+        // Parent is left child of grandparent
+        if (parent == grandParent->left) {
             uncle = grandParent->right;
 
+            //Recolor if needed
             if (uncle != nullptr && uncle->color) {
                 grandParent->color = true;
                 parent->color = false;
@@ -138,7 +162,8 @@ void fixTree(Tree *t, Node *root) {
                     root = parent;
                     parent = root->parent;
                 }
-
+                // New node is left child of parent. Rotate right
+                // Swap colors of grandparent and parent
                 rotateR(t, grandParent);
                 temp->color = grandParent->color;
                 grandParent->color = parent->color;
@@ -146,10 +171,10 @@ void fixTree(Tree *t, Node *root) {
                 root = parent;
             }
         }
-
+        // Parent is right child of grandparent
         else {
             uncle = grandParent->left;
-
+            // Recolor if needed
             if (uncle != nullptr && uncle->color) {
                 grandParent->color = true;
                 parent->color = false;
@@ -159,7 +184,7 @@ void fixTree(Tree *t, Node *root) {
             else {
                 // New node is left child of parent. Rotate Right
                 if ( root == parent->left) {
-                    rotateL(t, parent);
+                    rotateR(t, parent);
                     root = parent;
                     parent = root->parent;
                 }
@@ -185,4 +210,31 @@ Node &Node::operator = (const Node &rightObj) {
         this->color = rightObj.color;
     }
     return *this;
+}
+
+void printTree(Node* root, int spacing) {
+    int count = 10;
+    if (root == nullptr) {
+        return;
+    }
+    else {
+
+        spacing += count;
+
+        printTree(root->right, spacing);
+        std::cout << std::endl;
+        for (int i = count; i < spacing; i++) {
+            std::cout << " ";
+        }
+        std::cout << root->data;
+
+        if (root->color) {
+            std::cout << "(RED)";
+        }
+        else {
+            std::cout << "(BLACK)";
+        }
+        std::cout << " <       " << "\n";
+        printTree(root->left, spacing);
+    }
 }
